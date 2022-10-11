@@ -32,12 +32,12 @@ func init() {
 /*GetMsiToken ()
  *Uses the Managed Service Identity Extension to retrieve a token that allows the VM to call into
  *the Azure Resource Manager APIs*/
-func GetMsiToken() (token MsiToken, err error) {
+func GetMsiToken(objectID string) (token MsiToken, err error) {
 	var myToken MsiToken
 
 	// Build a request to call the MSI Extension OAuth2 Service
 	// The request must contain the resource for which we request the token
-	finalRequestURL := fmt.Sprintf("%s?api-version=2018-02-01&resource=%s", fmt.Sprintf(msiTokenURL), url.QueryEscape(resourceURL))
+	finalRequestURL := fmt.Sprintf("%s?api-version=2018-02-01&resource=%s&object_id=%s", msiTokenURL, url.QueryEscape(resourceURL), objectID)
 	req, err := http.NewRequest("GET", finalRequestURL, nil)
 	if err != nil {
 		return myToken, errors.New(fmt.Sprintf("failed creating http request object to request MSI token %s", err))
